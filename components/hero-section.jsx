@@ -6,6 +6,17 @@ import Image from "next/image";
 import { TextEffect } from "@/components/ui/text-effect";
 import { AnimatedGroup } from "@/components/ui/animated-group";
 import { HeroHeader } from "@/components/header";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const transitionVariants = {
   item: {
@@ -143,27 +154,53 @@ export default function HeroSection() {
                   }}
                   className="mt-12 flex flex-col items-center justify-center gap-2 md:flex-row"
                 >
-                  <div
-                    key={1}
-                    className="bg-foreground/10 rounded-[calc(var(--radius-xl)+0.125rem)] border p-0.5"
-                  >
-                    <Button
-                      asChild
-                      size="lg"
-                      className="rounded-xl px-5 text-base"
-                    >
-                      <Link href="#link">
-                        <span className="text-nowrap">Join the Waitlist</span>
-                      </Link>
-                    </Button>
-                  </div>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <div
+                        key={1}
+                        className="bg-foreground/10 rounded-[calc(var(--radius-xl)+0.125rem)] border p-0.5"
+                      >
+                        <Button
+                          size="lg"
+                          className="rounded-xl px-5 text-base"
+                        >
+                          <span className="text-nowrap">Join the Waitlist</span>
+                        </Button>
+                      </div>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[425px]">
+                      <DialogHeader>
+                        <DialogTitle>Join the Waitlist</DialogTitle>
+                        <DialogDescription>
+                          Be the first to know when Instroom is available.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="grid gap-4 py-4">
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="fullname" className="text-right">Fullname</Label>
+                          <Input id="fullname" placeholder="John Doe" className="col-span-3" />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="email" className="text-right">Email</Label>
+                          <Input id="email" type="email" placeholder="john.doe@example.com" className="col-span-3" />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="company" className="text-right">Company</Label>
+                          <Input id="company" placeholder="Acme Inc." className="col-span-3" />
+                        </div>
+                      </div>
+                      <DialogFooter>
+                        <Button type="submit">Submit</Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
                   <Button
                     key={2}
                     asChild
                     size="lg"
                     variant="ghost"
                     className="h-10.5 rounded-xl px-5"
-                  >
+                    >
                     <Link href="#link">
                       <span className="text-nowrap">Request a demo</span>
                     </Link>

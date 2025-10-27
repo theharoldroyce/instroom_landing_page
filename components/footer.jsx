@@ -4,11 +4,11 @@ import Link from 'next/link'
 const links = [
     {
         title: 'Features',
-        href: '#',
+        href: '#features',
     },
     {
-        title: 'Solution',
-        href: '#',
+        title: 'Solution', 
+        href: '#solution',
     },
     {
         title: 'Customers',
@@ -16,7 +16,7 @@ const links = [
     },
     {
         title: 'Pricing',
-        href: '#',
+        href: '#pricing',
     },
     {
         title: 'Help',
@@ -157,7 +157,7 @@ export default function FooterSection() {
                         </svg>
                     </Link>
                 </div>
-                <span className="text-muted-foreground block text-center text-sm"> © {new Date().getFullYear()} Tailark, All rights reserved</span>
+                <span className="text-muted-foreground block text-center text-sm"> © {new Date().getFullYear()} Instroom.io, All rights reserved</span>
             </div>
         </footer>
     );

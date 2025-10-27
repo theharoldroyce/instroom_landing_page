@@ -6,17 +6,19 @@ import { Button } from "@/components/ui/button";
 import React from "react";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 const menuItems = [
-  { name: "Features", href: "#link" },
-  { name: "Solution", href: "#link" },
-  { name: "Pricing", href: "#link" },
+  { name: "Features", href: "#features" },
+  { name: "Solution", href: "#solution" },
+  { name: "Pricing", href: "#pricing" },
   { name: "About", href: "#link" },
 ];
 
 export const HeroHeader = () => {
   const [menuState, setMenuState] = React.useState(false);
   const [isScrolled, setIsScrolled] = React.useState(false);
+  const router = useRouter();
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -90,32 +92,26 @@ export const HeroHeader = () => {
               </div>
               <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit">
                 <Button
-                  asChild
                   variant="outline"
                   size="sm"
                   className={cn(isScrolled && "lg:hidden")}
+                  onClick={() => router.push("/login")}
                 >
-                  <Link href="#">
-                    <span>Login</span>
-                  </Link>
+                  <span>Login</span>
                 </Button>
                 <Button
-                  asChild
                   size="sm"
                   className={cn(isScrolled && "lg:hidden")}
+                  onClick={() => router.push("/signup")}
                 >
-                  <Link href="#">
-                    <span>Sign Up</span>
-                  </Link>
+                  <span>Sign Up</span>
                 </Button>
                 <Button
-                  asChild
                   size="sm"
                   className={cn(isScrolled ? "lg:inline-flex" : "hidden")}
+                  onClick={() => router.push("/get-started")}
                 >
-                  <Link href="#">
-                    <span>Get Started</span>
-                  </Link>
+                  <span>Get Started</span>
                 </Button>
                 <ThemeToggle />
               </div>

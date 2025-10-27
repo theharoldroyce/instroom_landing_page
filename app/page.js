@@ -16,10 +16,16 @@ export default function Home() {
       <HeroSection />
       <LogoCloud />
       <Features1 />
-      <Features8 />
+      <section id="features">
+        <Features8 />
+      </section>
       <CTA />
-      <Features3 />
-      <Pricing />
+      <section id="solution">
+        <Features3 />
+      </section>
+      <section id="pricing">
+        <Pricing />
+      </section>
       <Testimonials />
       <FAQ />
       <Footer />
