@@ -13,7 +13,7 @@ export const Logo = ({
                 height={32}
                 className={cn('h-10 w-auto', className)}
             />
-            <span className="text-2xl font-bold text-white">Instroom</span>
+            <span className="text-2xl font-bold text-black dark:text-white">Instroom</span>
         </>
     );
 }
