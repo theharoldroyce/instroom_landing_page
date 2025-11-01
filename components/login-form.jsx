@@ -56,13 +56,10 @@ export function LoginForm({
               </Field>
               <Field>
                 <Button type="submit" className="w-full">Login</Button>
-                {/* <Button variant="outline" type="button" className="w-full">
-                  Login with Google
-                </Button>
                 <FieldDescription className="text-center">
                   Don&apos;t have an account?{" "}
                   <Link href="/signup" className="underline-offset-4 hover:underline">Sign up</Link>
-                </FieldDescription> */}
+                </FieldDescription>
               </Field>
             </FieldGroup>
           </form>
