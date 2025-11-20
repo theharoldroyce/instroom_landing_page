@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 
 const menuItems = [
+  { name: "Tools", href: "/tools" },
   { name: "Features", href: "#features" },
   { name: "Solution", href: "#solution" },
   { name: "Pricing", href: "#pricing" },
@@ -27,6 +28,18 @@ export const HeroHeader = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const handleSmoothScroll = (e, href) => {
+    if (href.startsWith("#")) {
+      e.preventDefault();
+      const element = document.querySelector(href);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+    setMenuState(false); // Close menu on mobile after click
+  };
+
   return (
     <header>
       <nav
@@ -65,8 +78,9 @@ export const HeroHeader = () => {
                 {menuItems.map((item, index) => (
                   <li key={index}>
                     <Link
+                      onClick={(e) => handleSmoothScroll(e, item.href)}
                       href={item.href}
-                      className="text-muted-foreground hover:text-accent-foreground block duration-150"
+                      className="text-muted-foreground hover:text-accent-foreground block cursor-pointer duration-150"
                     >
                       <span>{item.name}</span>
                     </Link>
@@ -81,8 +95,9 @@ export const HeroHeader = () => {
                   {menuItems.map((item, index) => (
                     <li key={index}>
                       <Link
+                        onClick={(e) => handleSmoothScroll(e, item.href)}
                         href={item.href}
-                        className="text-muted-foreground hover:text-accent-foreground block duration-150"
+                        className="text-muted-foreground hover:text-accent-foreground block cursor-pointer duration-150"
                       >
                         <span>{item.name}</span>
                       </Link>
