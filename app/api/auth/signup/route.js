@@ -1,10 +1,10 @@
 import bcrypt from 'bcryptjs';
 import { NextResponse } from 'next/server';
-import User from '../../../../models/user';
-import connectToDatabase from '../../../../lib/mongodb';
 
 const isValidEmail = (email) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  // Ensure email is a string before testing
+  if (typeof email !== 'string') return false;
   return emailRegex.test(email);
 };
 
@@ -16,6 +16,9 @@ const isStrongPassword = (password) => {
 
 export async function POST(request) {
   try {
+    // Moved imports inside the function to ensure they only run when the API route is called.
+    const connectToDatabase = (await import('../../../../lib/mongodb')).default;
+    const User = (await import('../../../../models/user')).default;
     await connectToDatabase();
 
     const { name, email, password, confirmPassword } = await request.json();
