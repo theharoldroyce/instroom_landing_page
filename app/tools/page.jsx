@@ -131,7 +131,7 @@ export default function ToolsPage() {
               <li>Avoid overpaying or underpricing</li>
             </ul>
             <Button size="lg" asChild>
-              <Link href="/tools/rate-influencer-calculator">
+              <Link href="/tools/influencer-rate-calculator">
                 Open calculator
               </Link>
             </Button>
