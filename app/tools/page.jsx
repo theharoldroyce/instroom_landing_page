@@ -1,17 +1,17 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { HeroHeader } from "@/components/header"
-import { Button } from "@/components/ui/button"
+import Link from "next/link";
+import { HeroHeader } from "@/components/header";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardHeader,
   CardTitle,
   CardDescription,
-} from "@/components/ui/card"
-import { CheckCircle, Chrome, Calculator, Workflow } from "lucide-react"
-import React from "react"
-import FooterSection from "@/components/footer"
+} from "@/components/ui/card";
+import { CheckCircle, Chrome, Calculator, Workflow } from "lucide-react";
+import React from "react";
+import FooterSection from "@/components/footer";
 
 export default function ToolsPage() {
   return (
@@ -20,15 +20,18 @@ export default function ToolsPage() {
 
       <main className="mx-auto max-w-6xl px-4">
         {/* HERO */}
-        <section className="flex flex-col justify-center text-center pt-32 pb-20 md:pt-36 md:pb-24 lg:pt-40 lg:pb-28">
+
+        <section className="h-screen flex flex-col items-center justify-center text-center">
           <div className="mx-auto max-w-3xl space-y-6">
             <h1 className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
               Work smarter with influencer tools built for speed
             </h1>
+
             <p className="text-base text-muted-foreground sm:text-lg">
               Everything you need to source creators, evaluate them, and manage
               campaigns in one simple workflow.
             </p>
+
             <div className="flex flex-wrap justify-center gap-3">
               <Button size="lg" asChild>
                 <Link href="/signup">Try Instroom free</Link>
@@ -37,6 +40,7 @@ export default function ToolsPage() {
                 <Link href="#tools-overview">Explore all tools</Link>
               </Button>
             </div>
+
             <ul className="mt-4 inline-flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
               <li className="flex items-center gap-2">
                 <CheckCircle className="h-4 w-4" />
@@ -182,9 +186,7 @@ export default function ToolsPage() {
               <li>Standardize how you evaluate creators</li>
             </ul>
             <Button size="lg" asChild>
-              <Link href="https://chrome.google.com/your-extension-url">
-                Add to Chrome
-              </Link>
+              <Link href="/tools/chrome-extension">Add to Chrome</Link>
             </Button>
           </div>
         </section>
@@ -301,5 +303,5 @@ export default function ToolsPage() {
 
       <FooterSection />
     </div>
-  )
+  );
 }
