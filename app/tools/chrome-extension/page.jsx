@@ -369,6 +369,41 @@ export default function ChromeExtensionPage() {
           </div>
         </section>
 
+        {/* PRICING */}
+        <section
+          id="pricing"
+          className="space-y-8 border-t border-border/40 py-24 lg:py-32"
+        >
+          <div className="space-y-2 text-center">
+            <h2 className="text-2xl font-semibold tracking-tight">
+              Simple, transparent pricing
+            </h2>
+            <p className="text-sm text-muted-foreground md:text-base">
+              Choose the plan that fits your sourcing needs.
+            </p>
+          </div>
+          <div className="mx-auto grid max-w-3xl gap-6 md:grid-cols-2">
+            <Card>
+              <CardHeader className="text-center">
+                <CardTitle>Free</CardTitle>
+              </CardHeader>
+              <div className="p-6 pt-0 text-center space-y-2">
+                <p className="text-3xl font-bold">50</p>
+                <p className="text-sm text-muted-foreground">credits per month</p>
+              </div>
+            </Card>
+            <Card>
+              <CardHeader className="text-center">
+                <CardTitle>Unlimited</CardTitle>
+              </CardHeader>
+              <div className="p-6 pt-0 text-center space-y-2">
+                <p className="text-3xl font-bold">$129<span className="text-sm font-normal text-muted-foreground">/month</span></p>
+                <p className="text-sm text-muted-foreground">Unlimited credits</p>
+              </div>
+            </Card>
+          </div>
+        </section>
+
         {/* FINAL CTA */}
         <section className="border-t border-border/40 py-24 lg:py-32">
           <div className="w-full rounded-2xl border bg-card px-6 py-10 text-center shadow-sm">
