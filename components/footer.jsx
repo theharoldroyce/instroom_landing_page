@@ -28,6 +28,22 @@ const links = [
     },
 ]
 
+const legalLinks = [
+    {
+        title: 'Terms & Conditions',
+        href: '/terms-and-conditions',
+    },
+    {
+        title: 'Privacy Policy',
+        href: '/privacy-policy',
+    },
+    {
+        title: 'Cookies Policy',
+        href: '/cookies-policy',
+    },
+    { title: 'DPA', href: '/data-processing-agreement' },
+]
+
 export default function FooterSection() {
     return (
         <footer className="py-16 md:py-32">
@@ -157,7 +173,20 @@ export default function FooterSection() {
                         </svg>
                     </Link>
                 </div>
-                <span className="text-muted-foreground block text-center text-sm"> © {new Date().getFullYear()} Instroom.io, All rights reserved</span>
+
+                <div className="flex flex-col items-center gap-4">
+                    <div className="flex flex-wrap justify-center gap-x-6 gap-y-4 text-sm">
+                        {legalLinks.map((link, index) => (
+                            <Link
+                                key={index}
+                                href={link.href}
+                                className="text-muted-foreground hover:text-primary block duration-150">
+                                <span>{link.title}</span>
+                            </Link>
+                        ))}
+                    </div>
+                    <span className="text-muted-foreground block text-center text-sm"> © {new Date().getFullYear()} Instroom.io, All rights reserved</span>
+                </div>
             </div>
         </footer>
     );
