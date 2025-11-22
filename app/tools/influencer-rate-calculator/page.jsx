@@ -21,15 +21,90 @@ import {
   BadgeCheck,
   Briefcase,
   User,
+  Loader2,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-
+import { useState, useEffect } from "react";
 import React, { useRef } from "react";
 import FooterSection from "@/components/footer";
 
 export default function InfluencerRateCalculatorPage() {
   const calculatorRef = useRef(null);
+
+  const [reels, setReels] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [username, setUsername] = useState();
+  const [inputValue, setInputValue] = useState();
+  const [totalPlayCount, setTotalPlayCount] = useState(0);
+  const [averagePlayCount, setAveragePlayCount] = useState(0);
+  const [cpv, setCpv] = useState(10);
+  const [estimatedEarnings, setEstimatedEarnings] = useState(0);
+
+  const fetchReels = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch(`/api/instagram/reels?username=${username}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch reels");
+      }
+      const data = await response.json();
+
+      // 1. Filter out today's videos
+      const today = new Date().setHours(0, 0, 0, 0);
+      const filteredByDate = data.data.items.filter((reel) => {
+        const reelDate = new Date(reel.taken_at * 1000).setHours(0, 0, 0, 0);
+        return reelDate < today;
+      });
+
+      // 2. Remove outliers using IQR
+      const playCounts = filteredByDate
+        .map((reel) => reel.ig_play_count)
+        .sort((a, b) => a - b);
+      const q1 = playCounts[Math.floor(playCounts.length / 4)];
+      const q3 = playCounts[Math.floor((playCounts.length * 3) / 4)];
+      const iqr = q3 - q1;
+      const maxValue = q3 + iqr * 1.5;
+      const minValue = q1 - iqr * 1.5;
+
+      const filteredByViews = filteredByDate.filter((reel) => {
+        return reel.ig_play_count >= minValue && reel.ig_play_count <= maxValue;
+      });
+
+      // 3. Get the last 8 videos
+      const finalReels = filteredByViews.slice(-8);
+
+      // 4. Calculate total and average play count
+      const total = finalReels.reduce(
+        (acc, reel) => acc + reel.ig_play_count,
+        0
+      );
+      setTotalPlayCount(total);
+      const avg = finalReels.length > 0 ? total / finalReels.length : 0;
+      setAveragePlayCount(avg);
+      setEstimatedEarnings((avg / 1000) * cpv);
+
+      setReels(finalReels);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchReels();
+  }, [username]);
+
+  useEffect(() => {
+    setEstimatedEarnings((averagePlayCount / 1000) * cpv);
+  }, [cpv, averagePlayCount]);
+
+  const handleSearch = () => {
+    setUsername(inputValue);
+  };
 
   const scrollToCalculator = () => {
     if (calculatorRef.current) {
@@ -95,12 +170,15 @@ export default function InfluencerRateCalculatorPage() {
         </section>
 
         {/* CALCULATOR (below hero) */}
-        <section ref={calculatorRef} className="border-t border-border/40 py-16 lg:py-20">
+        <section
+          ref={calculatorRef}
+          className="border-t border-border/40 py-16 lg:py-20"
+        >
           <div className="mx-auto max-w-4xl">
             <Card className="rounded-2xl border bg-card/80 shadow-sm">
               <CardHeader className="text-center space-y-2">
                 <CardTitle className="text-2xl sm:text-3xl">
-                  Calculate a fair influencer rate
+                  Calculate Influencer Rate
                 </CardTitle>
                 <CardDescription className="text-base">
                   Pull recent views and get a suggested rate based on your CPV.
@@ -118,6 +196,9 @@ export default function InfluencerRateCalculatorPage() {
                         id="username"
                         placeholder="Enter Instagram username"
                         className="pl-9 h-11"
+                        type="text"
+                        value={inputValue}
+                        onChange={(e) => setInputValue(e.target.value)}
                       />
                     </div>
                   </div>
@@ -132,45 +213,79 @@ export default function InfluencerRateCalculatorPage() {
                     <Input
                       id="cpv"
                       type="number"
-                      defaultValue={10}
                       min={0}
                       className="h-11"
+                      value={cpv}
+                      onChange={(e) => setCpv(e.target.value)}
+                      step="10"
                     />
                   </div>
 
-                  <Button size="lg" className="h-11 px-8">
+                  <Button
+                    size="lg"
+                    className="h-11 px-8"
+                    onClick={handleSearch}
+                  >
                     Calculate Rate
                   </Button>
                 </div>
 
                 {/* Results */}
                 <div className="mt-6 grid gap-3 sm:grid-cols-3">
-                  <Card className="rounded-xl border shadow-none">
-                    <CardHeader className="space-y-1 text-center">
-                      <CardTitle className="text-sm font-medium text-muted-foreground">
-                        Total Views (Last 8 Videos)
-                      </CardTitle>
-                      <div className="text-2xl font-semibold">0</div>
-                    </CardHeader>
-                  </Card>
+                  {loading && (
+                    <div className="sm:col-span-3 flex flex-col items-center justify-center space-y-2 py-8">
+                      <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                      <p className="text-sm text-muted-foreground">
+                        Calculating influencer rate...
+                      </p>
+                    </div>
+                  )}
+                  {error && <div>Error: {error}</div>}
+                  {!loading && !error && (
+                    <>
+                      <Card className="rounded-xl border shadow-none">
+                        <CardHeader className="space-y-1 text-center">
+                          <CardTitle className="text-sm font-medium text-muted-foreground">
+                            Total Views (Last 8 Videos)
+                          </CardTitle>
+                          <div className="text-2xl font-semibold">
+                            {totalPlayCount.toLocaleString(undefined, {
+                              maximumFractionDigits: 0,
+                            })}
+                          </div>
+                        </CardHeader>
+                      </Card>
 
-                  <Card className="rounded-xl border shadow-none">
-                    <CardHeader className="space-y-1 text-center">
-                      <CardTitle className="text-sm font-medium text-muted-foreground">
-                        Average Views per Video
-                      </CardTitle>
-                      <div className="text-2xl font-semibold">0</div>
-                    </CardHeader>
-                  </Card>
+                      <Card className="rounded-xl border shadow-none">
+                        <CardHeader className="space-y-1 text-center">
+                          <CardTitle className="text-sm font-medium text-muted-foreground">
+                            Average Views per Video
+                          </CardTitle>
+                          <div className="text-2xl font-semibold">
+                            {" "}
+                            {averagePlayCount.toLocaleString(undefined, {
+                              maximumFractionDigits: 0,
+                            })}
+                          </div>
+                        </CardHeader>
+                      </Card>
 
-                  <Card className="rounded-xl border shadow-none">
-                    <CardHeader className="space-y-1 text-center">
-                      <CardTitle className="text-sm font-medium text-muted-foreground">
-                        Suggested Influencer Rate
-                      </CardTitle>
-                      <div className="text-2xl font-semibold">$0</div>
-                    </CardHeader>
-                  </Card>
+                      <Card className="rounded-xl border shadow-none">
+                        <CardHeader className="space-y-1 text-center">
+                          <CardTitle className="text-sm font-medium text-muted-foreground">
+                            Suggested Influencer Rate
+                          </CardTitle>
+                          <div className="text-2xl font-semibold">
+                            {" "}
+                            ${" "}
+                            {estimatedEarnings.toLocaleString(undefined, {
+                              maximumFractionDigits: 0,
+                            })}
+                          </div>
+                        </CardHeader>
+                      </Card>
+                    </>
+                  )}
                 </div>
 
                 {/* Microcopy */}
